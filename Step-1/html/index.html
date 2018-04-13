@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Auth Site</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="protected"></div>
+    <a id="loginLink" class="hidden" href="/login">Click to Login</a>
+
+    <script>
+        const setProtectedText = text => document.querySelector('#protected').innerHTML = text;
+        const toggleLoginButton = () => document.querySelector('#loginLink').classList.toggle('hidden');
+
+        if (localStorage.token) {
+            fetch('/protected', {headers: {authorization: localStorage.token}})
+                .then(response => {
+                    if (!response.ok) {
+                        throw(new Error(response.statusText));
+                    }
+                    return response.json();
+                })
+                .then(({message}) => {
+                    console.log('message:', message);
+                    setProtectedText(message);
+                })
+                .catch(error => {
+                    console.log('error:', error);
+                    setProtectedText('Login expired!');
+                    toggleLoginButton();
+                    localStorage.removeItem('token');
+                });
+        } else {
+            toggleLoginButton();
+        }
+    </script>
+</body>
+</html>

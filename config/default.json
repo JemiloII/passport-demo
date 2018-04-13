@@ -1,0 +1,12 @@
+{
+  "auth": {
+    "google": {
+      "clientID": null,
+      "clientSecret": null
+    },
+    "facebook": {}
+  },
+  "token": {
+    "secret": "secret"
+  }
+}
